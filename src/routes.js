@@ -42,6 +42,10 @@ export const routes = [
       const { title, description } = req.body;
       const created_at = dataAtual;
 
+      if (!title || !description) {
+        return res.writeHead(400).end();
+      }
+
       const task = {
         id: randomUUID(),
         title: title,
@@ -64,6 +68,10 @@ export const routes = [
       const { id } = req.params;
       const { title, description } = req.body;
       const updated_at = dataAtual;
+
+      if (!title || !description) {
+        return res.writeHead(400).end();
+      }
 
       database.update("tasks", id, {
         title,
