@@ -52,7 +52,7 @@ export const routes = [
         id: randomUUID(),
         title: title,
         description: description,
-        completed_at: "",
+        completed_at: null,
         created_at: created_at,
         updated_at: "",
       };
@@ -87,7 +87,7 @@ export const routes = [
           id: randomUUID(),
           title: taskFile.title,
           description: taskFile.description,
-          completed_at: "",
+          completed_at: null,
           created_at: created_at,
           updated_at: "",
         };
