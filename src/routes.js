@@ -3,6 +3,11 @@ import { Database } from "./database.js";
 import { buildRoutePath } from "./utils/build-route-path.js";
 
 const database = new Database();
+const hoje = new Date();
+const dia = String(hoje.getDate()).padStart(2, "0");
+const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+const ano = hoje.getFullYear().toString().slice(2);
+const dataAtual = `${dia}/${mes}/${ano}`;
 
 export const routes = [
   //get
@@ -45,6 +50,24 @@ export const routes = [
       database.insert("tasks", task);
 
       return res.writeHead(201).end();
+    },
+  },
+  //put
+  {
+    method: "PUT",
+    path: buildRoutePath("/tasks/:id"),
+    handler: (req, res) => {
+      const { id } = req.params;
+      const { title, description } = req.body;
+      const updated_at = dataAtual;
+
+      database.update("tasks", id, {
+        title,
+        description,
+        updated_at,
+      });
+
+      return res.writeHead(204).end();
     },
   },
 ];
