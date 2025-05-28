@@ -27,7 +27,11 @@ export const routes = [
           : null
       );
 
-      return res.end(JSON.stringify(tasks));
+      if (tasks.length === 0) {
+        return res.writeHead(204).end(JSON.stringify(tasks));
+      } else {
+        return res.end(JSON.stringify(tasks));
+      }
     },
   },
   //post
