@@ -41,9 +41,11 @@ export const routes = [
     handler: (req, res) => {
       const { title, description } = req.body;
       const created_at = dataAtual;
+      let errors = { errors: [] };
 
       if (!title || !description) {
-        return res.writeHead(400).end();
+        errors.errors.push("Insira todos os campos para criar a tarefa.");
+        return res.writeHead(400).end(JSON.stringify(errors));
       }
 
       const task = {
@@ -68,9 +70,20 @@ export const routes = [
       const { id } = req.params;
       const { title, description } = req.body;
       const updated_at = dataAtual;
+      let errors = { errors: [] };
+
+      const taskById = database.selectById("tasks", id);
 
       if (!title || !description) {
-        return res.writeHead(400).end();
+        errors.errors.push("Insira todos os campos para atualizar a tarefa.");
+      }
+
+      if (!taskById) {
+        errors.errors.push("ID não encontrado.");
+      }
+
+      if (!title || !description || !taskById) {
+        return res.writeHead(400).end(JSON.stringify(errors));
       }
 
       database.update("tasks", id, {
@@ -88,6 +101,14 @@ export const routes = [
     path: buildRoutePath("/tasks/:id"),
     handler: (req, res) => {
       const { id } = req.params;
+      let errors = { errors: [] };
+
+      const taskById = database.selectById("tasks", id);
+
+      if (!taskById) {
+        errors.errors.push("ID não encontrado.");
+        return res.writeHead(400).end(JSON.stringify(errors));
+      }
 
       database.delete("tasks", id);
 
@@ -101,6 +122,14 @@ export const routes = [
     handler: (req, res) => {
       const { id } = req.params;
       const completed_at = dataAtual;
+      let errors = { errors: [] };
+
+      const taskById = database.selectById("tasks", id);
+
+      if (!taskById) {
+        errors.errors.push("ID não encontrado.");
+        return res.writeHead(400).end(JSON.stringify(errors));
+      }
 
       database.update("tasks", id, { completed_at });
 
