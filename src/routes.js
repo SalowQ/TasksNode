@@ -62,6 +62,41 @@ export const routes = [
       return res.writeHead(201).end();
     },
   },
+  //post group
+  {
+    method: "POST",
+    path: buildRoutePath("/tasks/sheet"),
+    handler: (req, res) => {
+      const { tasks } = req.body;
+      const created_at = dataAtual;
+      let errors = { errors: [] };
+
+      const hasEmptyString = tasks.some((task) =>
+        Object.values(task).some((value) => value === "")
+      );
+
+      if (hasEmptyString) {
+        errors.errors.push(
+          "Os campos de todas as tarefas precisam estar preenchidos."
+        );
+        return res.writeHead(400).end(JSON.stringify(errors));
+      }
+
+      for (const taskFile of tasks) {
+        const task = {
+          id: randomUUID(),
+          title: taskFile.title,
+          description: taskFile.description,
+          completed_at: "",
+          created_at: created_at,
+          updated_at: "",
+        };
+        database.insert("tasks", task);
+      }
+
+      return res.writeHead(201).end();
+    },
+  },
   //put
   {
     method: "PUT",
